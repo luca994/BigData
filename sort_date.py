@@ -7,7 +7,7 @@ def takeKey(elem):
 	temp = elem[0].split("-")
 	month=int(temp[1])+10
 	if(len(temp)>2):
-		valueString = re.search('\w{1,}', temp[2])
+		valueString = re.search('\D{1,}', temp[2])
 	if(len(temp)>2 and valueString==None):
 		day=int(temp[2])+10
 		temp = temp[0]+str(month)+str(day)

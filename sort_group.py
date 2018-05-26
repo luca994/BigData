@@ -9,8 +9,8 @@ def takeKey(elem):
 		value=0
 	return int(value)
 
-fileName = sys.argv[-1]
-outputFileName = sys.argv[-2]
+fileName = sys.argv[-2]
+outputFileName = sys.argv[-1]
 if outputFileName==None:
 	outputFileName=fileName+"_sort"
 file = open(fileName, "r")

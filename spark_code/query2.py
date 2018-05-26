@@ -2,17 +2,6 @@ import datetime
 from pyspark import SparkContext
 from sys import argv
 
-sc=SparkContext("local", "query1")
-
-file=None
-outputFileName=None
-try:
-	file=sc.textFile(argv[-2])
-	outputFileName=argv[-1]
-except Exception as e:
-	print("Wrong input\n")
-	raise e
-
 def mapFuncKey(elem):
 	week = datetime.date(int(elem[0]), int(elem[1]), int(elem[2])).isocalendar()[1]
 	year = None
@@ -33,11 +22,19 @@ def mapFuncValue(elem):
 		value = 1
 	return value
 
-def reduceFunc(elem):
-	listElem = list(elem[1])
-	count=size
+sc=SparkContext("local", "query2")
 
-splittedFile = file.map(lambda x: x.split(",")).filter(lambda x: x[0]!="Year").map(lambda x: (mapFuncKey(x), (mapFuncValue(x), 1))).reduceByKey(lambda x,y: (x[0]+y[0], x[1]+y[1]))
+file=None
+outputFileName=None
+try:
+	file=sc.textFile(argv[-2])
+	outputFileName=argv[-1]
+except Exception as e:
+	print("Wrong input\n")
+	raise e
+
+splittedFile = file.map(lambda x: x.split(",")).filter(lambda x: x[0]!="Year").map(lambda x: (mapFuncKey(x), (mapFuncValue(x), 1)))\
+					.reduceByKey(lambda x,y: (x[0]+y[0], x[1]+y[1]))
 result = splittedFile.map(lambda x: (x[0], (x[1][0]/x[1][1])*100)).collect()
 fileWrite = open(outputFileName, "w")
 for el in result:

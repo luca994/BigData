@@ -12,7 +12,8 @@ except Exception as e:
 	print("Wrong input\n")
 	raise e
 
-splittedFile = file.map(lambda x: x.split(",")).filter(lambda x: x[0]!="Year").map(lambda x: (x[0]+"-"+x[1]+"-"+x[2], (int(x[21]), 1))).reduceByKey(lambda x,y: (x[0]+y[0], x[1]+y[1]))
+splittedFile = file.map(lambda x: x.split(",")).filter(lambda x: x[0]!="Year")\
+					.map(lambda x: (x[0]+"-"+x[1]+"-"+x[2], (int(x[21]), 1))).reduceByKey(lambda x,y: (x[0]+y[0], x[1]+y[1]))
 resultFile = splittedFile.map(lambda x: (x[0], (x[1][0]/x[1][1])*100))
 resultList = resultFile.collect()
 fileWrite = open(outputFileName, "w")
