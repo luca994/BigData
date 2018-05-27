@@ -1,4 +1,4 @@
-package query2;
+package query2_v1;
 
 import java.io.IOException;
 import java.util.Iterator;
