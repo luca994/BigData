@@ -1,4 +1,4 @@
-package bd_project.query2;
+package query2;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -18,10 +18,8 @@ public class WeatherDelaysMap extends MapReduceBase implements Mapper<LongWritab
 	public void map(LongWritable arg0, Text arg1, OutputCollector<Text, IntWritable> arg2, Reporter arg3)
 			throws IOException {
 		String[] line = arg1.toString().split(",");
-		if (!line[0].equals("Year")) {
-			int delay = 0;
-			if (!line[25].equals("NA"))
-				delay = Integer.parseInt(line[25]);
+		if (!(line[0].equals("Year") || line[25].equals("NA"))) {
+			int delay = Integer.parseInt(line[25]);
 			String key = null;
 			Calendar calendar = new GregorianCalendar(Integer.parseInt(line[0]), Integer.parseInt(line[1]) - 1,
 					Integer.parseInt(line[2]));

@@ -18,7 +18,7 @@ def mapFuncKey(elem):
 
 def mapFuncValue(elem):
 	value = 0
-	if elem[25] != "NA" and elem[25] != "0":
+	if elem[25] != "0":
 		value = 1
 	return value
 
@@ -33,10 +33,15 @@ except Exception as e:
 	print("Wrong input\n")
 	raise e
 
-splittedFile = file.map(lambda x: x.split(",")).filter(lambda x: x[0]!="Year").map(lambda x: (mapFuncKey(x), (mapFuncValue(x), 1)))\
+splittedFile = file.map(lambda x: x.split(",")).filter(lambda x: x[0]!="Year" and x[25]!="NA").map(lambda x: (mapFuncKey(x), (mapFuncValue(x), 1)))\
 					.reduceByKey(lambda x,y: (x[0]+y[0], x[1]+y[1]))
 result = splittedFile.map(lambda x: (x[0], (x[1][0]/x[1][1])*100)).collect()
 fileWrite = open(outputFileName, "w")
 for el in result:
-	fileWrite.write(el[0]+"\t"+str(el[1])+"\n")
+	value = str(el[1]).split(".")
+	if(len(value)>1):
+		value=value[0]+","+value[1]
+	else:
+		value = value[0]
+	fileWrite.write(el[0]+";"+value+"\n")
 fileWrite.close()

@@ -1,4 +1,4 @@
-package bd_project.query3;
+package query3;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;

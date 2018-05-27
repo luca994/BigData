@@ -18,5 +18,10 @@ resultFile = splittedFile.map(lambda x: (x[0], (x[1][0]/x[1][1])*100))
 resultList = resultFile.collect()
 fileWrite = open(outputFileName, "w")
 for el in resultList:
-	fileWrite.write(el[0]+"\t"+str(el[1])+"\n")
+	value = str(el[1]).split(".")
+	if(len(value)>1):
+		value=value[0]+","+value[1]
+	else:
+		value = value[0]
+	fileWrite.write(el[0]+";"+value+"\n")
 fileWrite.close()

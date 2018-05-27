@@ -1,4 +1,4 @@
-package bd_project.query2;
+package query2;
 
 import java.io.IOException;
 import java.util.Iterator;

@@ -1,4 +1,4 @@
-package query1;
+package query5;
 
 import java.io.IOException;
 
@@ -10,17 +10,25 @@ import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 
-public class CanceledFlightMap extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
+public class DayOfWeekDelayMap extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable>{
 
+	String[] days = {"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
+	
 	@Override
 	public void map(LongWritable arg0, Text arg1, OutputCollector<Text, IntWritable> arg2, Reporter arg3)
 			throws IOException {
 		String[] line = arg1.toString().split(",");
-		if (!line[0].equals("Year")) {
-			String key = line[0] + "-" + line[1] + "-" + line[2];
-			Integer value = Integer.parseInt(line[21]);
+		if(!(line[0].equals("Year") || line[4].equals("NA") || line[14].equals("NA"))) {
+			int group = (Integer.parseInt(line[4])/600)+1;
+			if(group==5)
+				group=1;
+			String key = line[0]+"-"+ days[Integer.parseInt(line[3])-1]+"-"+group;
+			int value = 0;
+			if(Integer.parseInt(line[14])>0)
+				value = 1;
 			arg2.collect(new Text(key), new IntWritable(value));
 		}
+		
 	}
-
+	
 }
